@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Start the new activity
                 startActivity(numbersIntent);
+
             }
         });
 
