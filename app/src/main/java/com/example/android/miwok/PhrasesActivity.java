@@ -15,6 +15,8 @@
  */
 package com.example.android.miwok;
 
+import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -43,5 +45,6 @@ public class PhrasesActivity extends AppCompatActivity {
         WordAdapter wordAdapter = new WordAdapter(this , words);
         ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(wordAdapter);
+        listView.setBackgroundColor(ContextCompat.getColor(PhrasesActivity.this, R.color.category_phrases));
     }
 }
