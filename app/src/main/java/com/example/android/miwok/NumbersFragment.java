@@ -1,37 +1,27 @@
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.android.miwok;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ColorsActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class NumbersFragment extends Fragment {
 
-    MediaPlayer mediaPlayer;
-    AudioManager am;
+    private MediaPlayer mediaPlayer;
+    private AudioManager am ;
     private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mp) {
@@ -39,25 +29,32 @@ public class ColorsActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_list);
+    public NumbersFragment() {
+        // Required empty public constructor
+    }
 
-        am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.word_list , container ,false);
+
+        am = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
         final ArrayList<Word> words = new ArrayList<Word>();
-        words.add(new Word("red", "weṭeṭṭi", R.drawable.color_red, R.raw.color_red));
-        words.add(new Word("green", "chokokki", R.drawable.color_green, R.raw.color_green));
-        words.add(new Word("brown", "ṭakaakki", R.drawable.color_brown, R.raw.color_brown));
-        words.add(new Word("gray", "ṭopoppi", R.drawable.color_gray, R.raw.color_gray));
-        words.add(new Word("black", "kululli", R.drawable.color_black, R.raw.color_black));
-        words.add(new Word("white", "kelelli", R.drawable.color_white, R.raw.color_white));
-        words.add(new Word("dusty yellow", "ṭopiisә", R.drawable.color_dusty_yellow, R.raw.color_dusty_yellow));
-        words.add(new Word("mustard yellow", "chiwiiṭә", R.drawable.color_mustard_yellow, R.raw.color_mustard_yellow));
+        words.add(new Word("one", "lutti", R.drawable.number_one, R.raw.number_one));
+        words.add(new Word("two", "otiiko", R.drawable.number_two, R.raw.number_two));
+        words.add(new Word("three", "tolookosu", R.drawable.number_three, R.raw.number_three));
+        words.add(new Word("four", "oyyisa", R.drawable.number_four, R.raw.number_four));
+        words.add(new Word("five", "massokka", R.drawable.number_five, R.raw.number_five));
+        words.add(new Word("six", "temmokka", R.drawable.number_six, R.raw.number_six));
+        words.add(new Word("seven", "kenekaku", R.drawable.number_seven, R.raw.number_seven));
+        words.add(new Word("eight", "kawinta", R.drawable.number_eight, R.raw.number_eight));
+        words.add(new Word("nine", "wo’e", R.drawable.number_nine, R.raw.number_nine));
+        words.add(new Word("ten", "na’aacha", R.drawable.number_ten, R.raw.number_ten));
 
-        WordAdapter wordAdapter = new WordAdapter(this, words, R.color.category_colors);
-        ListView listView = (ListView) findViewById(R.id.list);
+        WordAdapter wordAdapter = new WordAdapter(getActivity(), words, R.color.category_numbers);
+        final ListView listView = (ListView) rootView.findViewById(R.id.list);
         listView.setAdapter(wordAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -69,19 +66,19 @@ public class ColorsActivity extends AppCompatActivity {
                 int result = am.requestAudioFocus(afChangeListener,
                         AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
-                if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                    mediaPlayer = MediaPlayer.create(ColorsActivity.this, word.getAudioResourceId());
+                if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
+                {
+                    mediaPlayer = MediaPlayer.create(getActivity(), word.getAudioResourceId());
                     mediaPlayer.start();
                     mediaPlayer.setOnCompletionListener(mCompletionListener);
                 }
             }
-        });
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        releaseMediaPlayer();
+        });
+
+
+
+        return rootView;
     }
 
     AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
@@ -109,7 +106,6 @@ public class ColorsActivity extends AppCompatActivity {
             }
         }
     };
-
     /**
      * Clean up the media player by releasing its resources.
      */
@@ -124,12 +120,15 @@ public class ColorsActivity extends AppCompatActivity {
             // setting the media player to null is an easy way to tell that the media player
             // is not configured to play an audio file at the moment.
             mediaPlayer = null;
+
             am.abandonAudioFocus(afChangeListener);
+
         }
     }
 
-
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        releaseMediaPlayer();
+    }
 }
-
-
